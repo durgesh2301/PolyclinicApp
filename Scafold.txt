@@ -1,0 +1,11 @@
+Get-Help Scaffold-DbContext -Detailed
+# Scaffold-DbContext is a command used in Entity Framework Core to create a DbContext and entity classes based on an existing database.
+
+
+# Example usage:
+
+Scaffold-DbContext -Connection "Data Source =(localdb)\MSSQLLocalDB;Initial Catalog=PolyclinicDB;Integrated Security=true" -Provider Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+
+# -Connection: Specifies the connection string to the database.
+# -Provider: Specifies the database provider to use, in this case, Microsoft SQL Server.
+# -OutputDir: Specifies the directory where the generated entity classes and DbContext will be placed.

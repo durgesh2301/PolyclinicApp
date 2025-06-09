@@ -1,0 +1,6 @@
+@PolyclinicSLLayer_HostAddress = http://localhost:5065
+
+GET {{PolyclinicSLLayer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

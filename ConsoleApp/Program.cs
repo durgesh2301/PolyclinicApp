@@ -21,6 +21,10 @@ namespace ConsoleApp
             polyclinicRepository.GetPatientById(1002);
             polyclinicRepository.GetAllAppointments();
             polyclinicRepository.GetAppointmentById(1005);
+            polyclinicRepository.CalculateDoctorFees(1001, DateTime.Now);
+            polyclinicRepository.FetchDoctorAppointments(1001, new DateTime(2023,10,07));
+            //int appointmentId = 0;
+            polyclinicRepository.GetDoctorAppointment(1001,1001,new DateTime(2025,07,12),out int appointmentId);
         }
     }
 }

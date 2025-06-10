@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using PoluclinicDALLayer.Models;
 using System;
 using System.Collections.Generic;
@@ -143,6 +144,37 @@ namespace PoluclinicDALLayer
             }
         }
 
+        public int GetDoctorAppointment(int doctorId, int patientId, DateTime appointmentDate, out int appointmentId)
+        {
+            appointmentId = 0;
+            int returnResult = 0;
+            int noOfRowsAffected = 0;
+            try { 
+                SqlParameter doctorIdParam = new SqlParameter("@DoctorId", doctorId);
+                SqlParameter patientIdParam = new SqlParameter("@PatientId", patientId);
+                SqlParameter appointmentDateParam = new SqlParameter("@AppointmentDate", appointmentDate);
+                SqlParameter appointmentIdParam = new SqlParameter("@AppointmentId", System.Data.SqlDbType.Int);
+                appointmentIdParam.Direction = System.Data.ParameterDirection.Output;
+                SqlParameter returnValueParam = new SqlParameter("@ReturnValue", System.Data.SqlDbType.Int);
+                returnValueParam.Direction = System.Data.ParameterDirection.Output;
+
+                noOfRowsAffected = dbContext.Database.ExecuteSqlRaw("EXEC @ReturnValue = usp_GetDoctorAppointment @DoctorId, @PatientId, @AppointmentDate, @AppointmentID out", 
+                    returnValueParam, doctorIdParam, patientIdParam, appointmentDateParam, appointmentIdParam);
+                if (noOfRowsAffected > 0)
+                {
+                    returnResult = Convert.ToInt32(returnValueParam.Value);
+                    appointmentId = Convert.ToInt32(appointmentIdParam.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                returnResult = -99;
+                appointmentId = 0;
+            }
+            
+            return appointmentId;
+        }
+
         public bool UpdateDoctorFees(int DoctorId, decimal Fees)
         {
             bool isUpdated = false;
@@ -167,15 +199,39 @@ namespace PoluclinicDALLayer
             return isUpdated;
         }
 
-        public bool UpdateAppointmentDate(int AppointmentId, DateTime AppointmentDate)
+        public bool UpdateAppointmentDate(int appointmentId, DateTime appointmentDate)
         {
             bool isUpdated = false;
             try
             {
-                Appointment appointment = dbContext.Appointments.FirstOrDefault(a => a.AppointmentId == AppointmentId);
+                Appointment appointment = dbContext.Appointments.FirstOrDefault(a => a.AppointmentId == appointmentId);
                 if (appointment != null)
                 {
-                    appointment.AppointmentDate = AppointmentDate;
+                    appointment.AppointmentDate = appointmentDate;
+                    dbContext.SaveChanges();
+                    isUpdated = true;
+                }
+                else
+                {
+                    isUpdated = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                isUpdated = false;
+            }
+            return isUpdated;
+        }
+
+        public bool UpdatePatientName(int patientId, int newAge)
+        {
+            bool isUpdated = false;
+            try
+            {
+                Patient patient = dbContext.Patients.FirstOrDefault(p => p.PatientId == patientId);
+                if (patient != null)
+                {
+                    patient.Age = newAge;
                     dbContext.SaveChanges();
                     isUpdated = true;
                 }
@@ -263,5 +319,35 @@ namespace PoluclinicDALLayer
             return isDeleted;
         }
 
+        public decimal CalculateDoctorFees(int doctorId, DateTime appointmentDate)
+        {
+            decimal fees = 0;
+            try
+            {
+                fees = (from d in dbContext.Doctors
+                        select PolyclinicDbContext.ufn_CalculateDoctorFees(doctorId, appointmentDate)).FirstOrDefault();
+            }
+            catch(Exception ex)
+            {
+                fees = 0;
+            }
+            return fees;
+        }
+
+        public List<DoctorAppointments> FetchDoctorAppointments(int doctorId, DateTime appointmentDate)
+        {
+            List<DoctorAppointments> doctorAppointments = new List<DoctorAppointments>();
+            try
+            {
+                SqlParameter doctorIdParam = new SqlParameter("@DoctorId", doctorId);
+                SqlParameter appointmentDateParam = new SqlParameter("@AppointmentDate", appointmentDate);
+                doctorAppointments = dbContext.DoctorAppointments.FromSqlRaw("SELECT * FROM ufn_FetchAllAppointments(@DoctorId,@AppointmentDate)", doctorIdParam,appointmentDateParam).ToList();
+            }
+            catch (Exception ex)
+            {
+                doctorAppointments = null;
+            }
+            return doctorAppointments;
+        }
     }
 }

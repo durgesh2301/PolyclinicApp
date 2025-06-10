@@ -22,6 +22,14 @@ public partial class PolyclinicDbContext : DbContext
 
     public virtual DbSet<Patient> Patients { get; set; }
 
+    public virtual DbSet<DoctorAppointments> DoctorAppointments { get; set; }
+
+    [DbFunction()]
+    public static decimal ufn_CalculateDoctorFees(int doctorId, DateTime appointmentDate)
+    {
+        return 0;
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer(
             new ConfigurationBuilder()

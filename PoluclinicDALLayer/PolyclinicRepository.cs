@@ -175,15 +175,15 @@ namespace PoluclinicDALLayer
             return appointmentId;
         }
 
-        public bool UpdateDoctorFees(int DoctorId, decimal Fees)
+        public bool UpdateDoctorFees(int doctorId, decimal fees)
         {
             bool isUpdated = false;
             try
             {
-                Doctor doctor = dbContext.Doctors.FirstOrDefault(d => d.DoctorId == DoctorId);
+                Doctor doctor = dbContext.Doctors.FirstOrDefault(d => d.DoctorId == doctorId);
                 if (doctor != null)
                 {
-                    doctor.Fees = Fees;
+                    doctor.Fees = fees;
                     dbContext.SaveChanges();
                     isUpdated = true;
                 }
@@ -223,7 +223,7 @@ namespace PoluclinicDALLayer
             return isUpdated;
         }
 
-        public bool UpdatePatientName(int patientId, int newAge)
+        public bool UpdatePatientAge(int patientId, int newAge)
         {
             bool isUpdated = false;
             try

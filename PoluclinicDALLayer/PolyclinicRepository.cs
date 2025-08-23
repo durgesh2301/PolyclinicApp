@@ -130,22 +130,6 @@ namespace PoluclinicDALLayer
             }
         }
 
-        //public bool AddAppointment(Appointment appointment)
-        //{
-        //    try
-        //    {
-        //        dbContext.Appointments.Add(appointment);
-        //        dbContext.SaveChanges();
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return false;
-        //    }
-        //} 
-
-        // -- Same as above but implemented below code for adding appointment with validations using stored procedure
-
         public int GetDoctorAppointment(int doctorId, int patientId, DateTime appointmentDate, out int appointmentId)
         {
             appointmentId = 0;

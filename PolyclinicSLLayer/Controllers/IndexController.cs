@@ -165,22 +165,7 @@ namespace PolyclinicSLLayer.Controllers
             return Json(result);
         }
 
-        //[HttpPost("/api/appointments")]
-        //public JsonResult AddAppointment(Appointment appointment)
-        //{
-        //    bool result = false;
-        //    try
-        //    {
-        //        result = _polyclinicRepository.AddAppointment(appointment);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        result = false;
-        //    }
-        //    return Json(result);
-        //}
-
-        [HttpPost("/api/appointments")] // Same as "AddAppointment", this function is implemented with procedure along with validation
+        [HttpPost("/api/appointments")]
         public JsonResult GetDoctorAppointment(int doctorId, int patientId, DateTime appointmentDate)
         {
             int appointmentId = 0;

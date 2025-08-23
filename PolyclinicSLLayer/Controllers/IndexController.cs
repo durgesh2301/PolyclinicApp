@@ -5,7 +5,7 @@ using PoluclinicDALLayer.Models;
 namespace PolyclinicSLLayer.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/[action]")]
+    //[Route("api/[controller]/[action]")] //Added routing on methods with new name
     public class IndexController : Controller
     {
         PolyclinicRepository _polyclinicRepository;
@@ -14,7 +14,7 @@ namespace PolyclinicSLLayer.Controllers
             _polyclinicRepository = polyclinicRepository;
         }
 
-        [HttpGet]
+        [HttpGet("/api/doctors")]
         public JsonResult GetAllDoctors()
         {
             List<Doctor> doctors = new List<Doctor>();
@@ -29,7 +29,7 @@ namespace PolyclinicSLLayer.Controllers
             return Json(doctors);
         }
 
-        [HttpGet]
+        [HttpGet("/api/patients")]
         public JsonResult GetAllPatients()
         {
             List<Patient> patients = new List<Patient>();
@@ -44,7 +44,8 @@ namespace PolyclinicSLLayer.Controllers
             return Json(patients);
         }
 
-        [HttpGet]
+
+        [HttpGet("/api/appointments")]
         public JsonResult GetAllAppointments()
         {
             List<Appointment> appointments = new List<Appointment>();
@@ -59,7 +60,7 @@ namespace PolyclinicSLLayer.Controllers
             return Json(appointments);
         }
 
-        [HttpGet]
+        [HttpGet("/api/doctors/{doctorId}")]
         public JsonResult GetDoctorById(int doctorId)
         {
             Doctor doctor = new Doctor();
@@ -74,7 +75,7 @@ namespace PolyclinicSLLayer.Controllers
             return Json(doctor);
         }
 
-        [HttpGet]
+        [HttpGet("/api/patients/{patientId}")]
         public JsonResult GetPatientById(int patientId)
         {
             Patient patient = new Patient();
@@ -89,7 +90,7 @@ namespace PolyclinicSLLayer.Controllers
             return Json(patient);
         }
 
-        [HttpGet]
+        [HttpGet("/api/appointments/{appointmentId}")]
         public JsonResult GetAppointmentById(int appointmentId)
         {
             Appointment appointment = new Appointment();
@@ -104,7 +105,7 @@ namespace PolyclinicSLLayer.Controllers
             return Json(appointment);
         }
 
-        [HttpGet]
+        [HttpGet("/api/doctors/{doctorId}/fees")]
         public JsonResult CalculateDoctorFees(int doctorId, DateTime appointmentDate)
         {
             decimal fees = 0;
@@ -119,7 +120,7 @@ namespace PolyclinicSLLayer.Controllers
             return Json(fees);
         }
 
-        [HttpGet]
+        [HttpGet("/api/doctors/{doctorId}/{appointmentDate}/appointments")]
         public JsonResult FetchDoctorAppointments(int doctorId, DateTime appointmentDate)
         {
             List<DoctorAppointments> doctorAppointments = new List<DoctorAppointments>();
@@ -134,7 +135,7 @@ namespace PolyclinicSLLayer.Controllers
             return Json(doctorAppointments);
         }
 
-        [HttpPost]
+        [HttpPost("/api/doctors")]
         public JsonResult AddDoctor(Doctor doctor)
         {
             bool result = false;
@@ -149,7 +150,7 @@ namespace PolyclinicSLLayer.Controllers
             return Json(result);
         }
 
-        [HttpPost]
+        [HttpPost("/api/patients")]
         public JsonResult AddPatient(Patient patient)
         {
             bool result = false;
@@ -164,22 +165,22 @@ namespace PolyclinicSLLayer.Controllers
             return Json(result);
         }
 
-        [HttpPost]
-        public JsonResult AddAppointment(Appointment appointment)
-        {
-            bool result = false;
-            try
-            {
-                result = _polyclinicRepository.AddAppointment(appointment);
-            }
-            catch (Exception ex)
-            {
-                result = false;
-            }
-            return Json(result);
-        }
+        //[HttpPost("/api/appointments")]
+        //public JsonResult AddAppointment(Appointment appointment)
+        //{
+        //    bool result = false;
+        //    try
+        //    {
+        //        result = _polyclinicRepository.AddAppointment(appointment);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        result = false;
+        //    }
+        //    return Json(result);
+        //}
 
-        [HttpPost]
+        [HttpPost("/api/appointments")] // Same as "AddAppointment", this function is implemented with procedure along with validation
         public JsonResult GetDoctorAppointment(int doctorId, int patientId, DateTime appointmentDate)
         {
             int appointmentId = 0;
@@ -194,7 +195,7 @@ namespace PolyclinicSLLayer.Controllers
             return Json(appointmentId);
         }
 
-        [HttpPut]
+        [HttpPut("/api/doctors/{doctorId}/fees")]
         public JsonResult UpdateDoctorFees(int doctorId, decimal fees)
         {
             bool result = false;
@@ -209,7 +210,7 @@ namespace PolyclinicSLLayer.Controllers
             return Json(result);
         }
 
-        [HttpPut]
+        [HttpPut("/api/appointments/{appointmentId}/date")]
         public JsonResult UpdateAppointmentDate(int appointmentId, DateTime newDate)
         {
             bool result = false;
@@ -224,7 +225,7 @@ namespace PolyclinicSLLayer.Controllers
             return Json(result);
         }
 
-        [HttpPut]
+        [HttpPut("/api/patients/{patientId}/age")]
         public JsonResult UpdatePatientAge(int patientId, int newAge)
         {
             bool result = false;
@@ -239,7 +240,7 @@ namespace PolyclinicSLLayer.Controllers
             return Json(result);
         }
 
-        [HttpDelete]
+        [HttpDelete("/api/doctors/{doctorId}")]
         public JsonResult DeleteDoctor(int doctorId)
         {
             bool result = false;
@@ -254,7 +255,7 @@ namespace PolyclinicSLLayer.Controllers
             return Json(result);
         }
 
-        [HttpDelete]
+        [HttpDelete("/api/patients/{patientId}")]
         public JsonResult DeletePatient(int patientId)
         {
             bool result = false;
@@ -269,7 +270,7 @@ namespace PolyclinicSLLayer.Controllers
             return Json(result);
         }
 
-        [HttpDelete]
+        [HttpDelete("/api/appointment/{appointmentId}")]
         public JsonResult DeleteAppointment(int appointmentId)
         {
             bool result = false;

@@ -130,20 +130,6 @@ namespace PoluclinicDALLayer
             }
         }
 
-        public bool AddAppointment(Appointment appointment)
-        {
-            try
-            {
-                dbContext.Appointments.Add(appointment);
-                dbContext.SaveChanges();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-
         public int GetDoctorAppointment(int doctorId, int patientId, DateTime appointmentDate, out int appointmentId)
         {
             appointmentId = 0;

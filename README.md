@@ -11,7 +11,7 @@ Technologies
 •	.NET 8 (C# 12)
 •	ASP.NET Core Web API
 •	Entity Framework Core
-•	SQL Server (LocalDB)
+•	SQL Server 
 •	Layered architecture (DAL, SLL, UI)
 
 Getting Started
